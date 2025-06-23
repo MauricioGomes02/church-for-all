@@ -4,32 +4,11 @@ Church For All trata-se de um projeto de estudos, com foco em demonstrar a evolu
 
 ## Índice
 
-- [Sobre o Projeto](#church-for-all)
-- [Evolução do Projeto](#evolução-do-projeto)
+- [Sobre o Projeto](#sobre-o-projeto)
 - [Como rodar a aplicação](#como-rodar-a-aplicação)
+- [Histórico de Versões](#histórico-de-versões)
 - [Licença](#licença)
 - [Contato](#contato)
-
-## Evolução do Projeto
-
-Acompanhe aqui as principais etapas e avanços deste projeto:
-
-- Estruturação inicial do repositório e documentação.
-- Criação de uma API em Go utilizando apenas bibliotecas internas.
-- Implementação da rota `/churchs` para cadastro (POST) de igrejas.
-- Definição do payload para cadastro de igreja:
-
-```json
-{
-  "id": 1,
-  "name": "Igreja Central",
-  "address": "Rua das Flores, 123",
-  "phones": ["11999999999", "11888888888"],
-  "email": "contato@igreja.com"
-}
-```
-
-Novas funcionalidades e melhorias serão registradas nesta seção conforme o projeto evolui.
 
 ## Como rodar a aplicação
 
@@ -43,6 +22,16 @@ go run main.go
 
 4. Acesse a rota da API em [http://localhost:8080/churchs](http://localhost:8080/churchs)
    - Para cadastrar uma igreja, utilize o método **POST** com um payload JSON conforme o exemplo na seção de evolução do projeto.
+
+## Histórico de Versões
+
+### v0.0.0
+- Estruturação inicial do projeto e documentação básica.
+- Implementação da rota POST em `/churchs` para cadastro de igrejas.
+- Implementação da rota GET em `/churchs` para listar todas as igrejas cadastradas.
+- Melhoria nos comentários do código para facilitar o entendimento.
+
+Veja todas as versões e downloads em [Releases do GitHub](https://github.com/MauricioGomes02/church-for-all/releases)
 
 ## Licença
 

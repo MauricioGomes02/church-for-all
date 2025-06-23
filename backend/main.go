@@ -14,6 +14,9 @@ type Church struct {
 	Email   string   `json:"email"`
 }
 
+// Churchs representa uma lista de igrejas
+var Churchs []Church = make([]Church, 0)
+
 func main() {
 	// Responsável por definir o comportamento da aplicação ao acessar a url localhost:8080/churchs
 	http.HandleFunc("/churchs", func(w http.ResponseWriter, r *http.Request) {
@@ -33,8 +36,20 @@ func main() {
 				return
 			}
 
+			// Responsável por adicionar a igreja à lista de igrejas
+			Churchs = append(Churchs, church)
+
 			// Responsável por retornar a igreja cadastrada
 			json.NewEncoder(w).Encode(church)
+		}
+
+		// Responsável por definir o comportamento da aplicação quando o método GET é utilizado
+		if r.Method == http.MethodGet {
+			// Responsável por definir o tipo de conteúdo da resposta
+			w.Header().Set("Content-Type", "application/json")
+
+			// Responsável por retornar a lista de igrejas
+			json.NewEncoder(w).Encode(Churchs)
 		}
 	})
 
