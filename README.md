@@ -12,18 +12,31 @@ Church For All trata-se de um projeto de estudos, com foco em demonstrar a evolu
 
 ## Como rodar a aplicação
 
-1. Certifique-se de ter o Go instalado ([download aqui](https://go.dev/dl/)).
+1. Certifique-se de ter o Docker e o Go instalados.
 2. No terminal, navegue até a pasta `backend` do projeto.
-3. Execute o comando:
+3. Suba o banco de dados MySQL com:
+
+```sh
+docker-compose up -d
+```
+
+4. Execute a aplicação Go:
 
 ```sh
 go run main.go
 ```
 
-4. Acesse a rota da API em [http://localhost:8080/churchs](http://localhost:8080/churchs)
+5. Acesse a rota da API em [http://localhost:8080/churchs](http://localhost:8080/churchs)
    - Para cadastrar uma igreja, utilize o método **POST** com um payload JSON conforme o exemplo na seção de evolução do projeto.
+   - Para listar igrejas, utilize o método **GET**.
 
 ## Histórico de Versões
+
+### v0.1.0
+- Integração da API com banco de dados MySQL.
+- Adição de um arquivo docker-compose para facilitar o setup do banco.
+- Agora os dados de igrejas são persistidos no banco de dados.
+- Scripts de inicialização SQL podem ser executados automaticamente ao subir o banco.
 
 ### v0.0.0
 - Estruturação inicial do projeto e documentação básica.

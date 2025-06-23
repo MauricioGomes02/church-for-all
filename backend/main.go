@@ -1,8 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
+	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Church representa uma igreja
@@ -14,10 +18,16 @@ type Church struct {
 	Email   string   `json:"email"`
 }
 
-// Churchs representa uma lista de igrejas
-var Churchs []Church = make([]Church, 0)
-
 func main() {
+	// Conexão com o banco de dados MySQL
+	dsn := "root:root@tcp(localhost:3306)/church_for_all?parseTime=true"
+	db, err := sql.Open("mysql", dsn)
+
+	// Responsável por verificar se ocorreu algum erro ao conectar no banco de dados
+	if err != nil {
+		panic("Erro ao conectar no banco de dados: " + err.Error())
+	}
+
 	// Responsável por definir o comportamento da aplicação ao acessar a url localhost:8080/churchs
 	http.HandleFunc("/churchs", func(w http.ResponseWriter, r *http.Request) {
 		// Responsável por definir o comportamento da aplicação quando o método POST é utilizado
@@ -36,8 +46,18 @@ func main() {
 				return
 			}
 
-			// Responsável por adicionar a igreja à lista de igrejas
-			Churchs = append(Churchs, church)
+			// Responsável por inserir a igreja no banco de dados
+			// Converte o slice de phones em uma string separada por vírgula
+			phonesStr := ""
+			if len(church.Phones) > 0 {
+				phonesStr = strings.Join(church.Phones, ",")
+			}
+			_, err = db.Exec("INSERT INTO church (id, name, address, phones, email) VALUES (?, ?, ?, ?, ?)", church.ID, church.Name, church.Address, phonesStr, church.Email)
+			if err != nil {
+				// Responsável por retornar um erro 500 caso ocorra um erro ao inserir a igreja no banco de dados
+				http.Error(w, "Failed to insert church", http.StatusInternalServerError)
+				return
+			}
 
 			// Responsável por retornar a igreja cadastrada
 			json.NewEncoder(w).Encode(church)
@@ -48,8 +68,39 @@ func main() {
 			// Responsável por definir o tipo de conteúdo da resposta
 			w.Header().Set("Content-Type", "application/json")
 
+			// Responsável por buscar todas as igrejas no banco de dados
+			rows, err := db.Query("SELECT * FROM church")
+			if err != nil {
+				// Responsável por retornar um erro 500 caso ocorra um erro ao buscar as igrejas no banco de dados
+				http.Error(w, "Failed to get churches", http.StatusInternalServerError)
+				return
+			}
+
+			// Responsável por criar um slice de igrejas
+			var churches []Church
+
+			// Responsável por iterar sobre as linhas retornadas pela query
+			for rows.Next() {
+				var church Church
+				var phonesStr string
+				err = rows.Scan(&church.ID, &church.Name, &church.Address, &phonesStr, &church.Email)
+				if err != nil {
+					// Responsável por retornar um erro 500 caso ocorra um erro ao scanear as linhas retornadas pela query
+					http.Error(w, "Failed to scan church", http.StatusInternalServerError)
+					return
+				}
+
+				// Converte a string de telefones separada por vírgula em um slice de strings
+				if phonesStr != "" {
+					church.Phones = strings.Split(phonesStr, ",")
+				} else {
+					church.Phones = []string{}
+				}
+				churches = append(churches, church)
+			}
+
 			// Responsável por retornar a lista de igrejas
-			json.NewEncoder(w).Encode(Churchs)
+			json.NewEncoder(w).Encode(churches)
 		}
 	})
 
