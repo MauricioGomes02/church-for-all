@@ -32,6 +32,9 @@ go run main.go
 
 ## Histórico de Versões
 
+### v0.1.1
+- Refatoração do código seguindo o princípio da Responsabilidade Única (SRP) do SOLID, separando as responsabilidades em diferentes funções, arquivos ou camadas para melhorar a organização e manutenção do projeto.
+
 ### v0.1.0
 - Integração da API com banco de dados MySQL.
 - Adição de um arquivo docker-compose para facilitar o setup do banco.
