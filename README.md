@@ -23,14 +23,27 @@ docker-compose up -d
 4. Execute a aplicação Go:
 
 ```sh
-go run main.go
+go run cmd/api/main.go
 ```
 
 5. Acesse a rota da API em [http://localhost:8080/churchs](http://localhost:8080/churchs)
-   - Para cadastrar uma igreja, utilize o método **POST** com um payload JSON conforme o exemplo na seção de evolução do projeto.
+   - Para cadastrar uma igreja, utilize o método **POST**
    - Para listar igrejas, utilize o método **GET**.
 
 ## Histórico de Versões
+
+### v1.0.0
+-Reestruturação completa do projeto, seguindo a estrutura recomendada pela comunidade Go, com ajustes para o contexto da aplicação.
+
+- Adoção do framework Gin para controle e manipulação mais eficiente da API.
+
+- Criação de testes iniciais, promovendo maior confiabilidade no código e facilitando a evolução do projeto.
+
+- Abstração de dependências por meio de interfaces, permitindo testes de unidade mais eficazes e maior flexibilidade na implementação.
+
+- Segregação de interfaces conforme o princípio da Segregação de Interfaces (ISP) do SOLID, garantindo que clientes dependam apenas do que realmente utilizam.
+
+- Melhoria geral na organização do código, visando facilitar a manutenção e evolução da aplicação.
 
 ### v0.1.1
 - Refatoração do código seguindo o princípio da Responsabilidade Única (SRP) do SOLID, separando as responsabilidades em diferentes funções, arquivos ou camadas para melhorar a organização e manutenção do projeto.
